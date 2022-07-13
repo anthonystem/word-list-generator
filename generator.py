@@ -1,7 +1,9 @@
 from curses.ascii import isalpha
+from os import remove
 import re
 
 # Removes whitespace lines from a text file.
+# file - file that will have its whitespace lines removed from.
 def remove_whitespace(file):
     input_file = open(file, "rt")
     lines = []
@@ -17,8 +19,11 @@ def remove_whitespace(file):
     print("Cleared")
 
 
-# Generates a list of unsorted unique words.
-def generate_list(file, min_word_size):
+# Generates a list of unsorted unique words/strings.
+# file - a text file the program will use to generate a word list.
+# min_word_size - minimum length of word that will be included in the generated list.
+# max_word_size - maximum length of word that will be included in the generate list.
+def generate_list(file, min_word_size, max_word_size):
     # Regex used to find unwanted characters in words.
     regex = re.compile("[ !\"“#$%&'()*+,-./:;<=>?@[\]^_`’{|}~]")
 
@@ -29,12 +34,12 @@ def generate_list(file, min_word_size):
     while line != "":
         line_words = line.strip().split(' ')
         for word in line_words:
-            if not re.search(regex, word) and not (len(word) < min_word_size) and word.isalpha():
+            if not re.search(regex, word) and not (len(word) < min_word_size or len(word) > max_word_size) and word.isalpha():
                 if word.lower() not in unique_words:
                     unique_words.append(word.lower())
         line = text_file.readline()
-
     text_file.close()
+
     return unique_words
 
 
@@ -49,7 +54,7 @@ def write_list_to_file(word_list, file):
 
 
 # Removes names from a list using name-list.txt.
-# word_list - a  word list that will have names removed from
+# word_list - a word list that will have names removed from
 # name_list_file - a file containing names or specific words not wanted in the final word list.
 def remove_names(word_list, name_list_file):
     name_file = open(name_list_file, "rt")
@@ -66,12 +71,17 @@ def remove_names(word_list, name_list_file):
     return updated_list
 
 
+#TODO: Create function that checks for Roman numerals.
+def remove_roman_numerals(word_list):
+    return
+
+
 def main():
     # Remove whitespace from file.
     remove_whitespace("text.txt")
     # Generate base word list.
-    words = generate_list("text.txt", 3)
-    # Remove names from word list.
+    words = generate_list("text.txt", 3, 100)
+    # Remove names.
     words = remove_names(words, "name-list.txt")
     # Sort the word list.
     words.sort()
