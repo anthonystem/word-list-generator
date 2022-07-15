@@ -78,9 +78,9 @@ def remove_roman_numerals(word_list):
 
 def main():
     # Remove whitespace from file.
-    remove_whitespace("text.txt")
+    remove_whitespace("example-text.txt")
     # Generate base word list.
-    words = generate_list("text.txt", 3, 100)
+    words = generate_list("example-text.txt", 3, 100)
     # Remove names.
     words = remove_names(words, "name-list.txt")
     # Sort the word list.
